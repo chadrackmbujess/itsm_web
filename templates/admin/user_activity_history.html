@@ -1,0 +1,65 @@
+<!-- admin/user_activity_history.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Historique des activités</title>
+</head>
+<body class="bg-gray-900 text-white p-4 flex justify-center items-center min-h-screen">
+    <div class="max-w-4xl w-full bg-gray-800 shadow-lg rounded-lg p-6 border border-gray-700">
+        <h1 class="text-2xl font-bold mb-4 text-center text-blue-400">🕒 Historique des activités de {{ user.username }}</h1>
+
+        <!-- Formulaire de filtre -->
+        <form method="get" action="" class="mb-4 flex items-center gap-2 justify-center">
+            <label for="date_filter" class="text-gray-300 text-sm">Filtrer par date :</label>
+            <input type="date" id="date_filter" name="date_filter" value="{{ date_filter }}" class="border rounded-md p-2 bg-gray-700 text-white text-sm focus:ring-2 focus:ring-blue-500 shadow-sm">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition shadow-sm">Filtrer</button>
+        </form>
+
+        <!-- Tableau des activités -->
+        <div class="overflow-x-auto rounded-lg border border-gray-700 shadow-sm">
+            <table class="w-full bg-gray-700 rounded-md text-sm">
+                <thead>
+                    <tr class="bg-blue-600 text-white">
+                        <th class="px-4 py-2 text-left">Type d'activité</th>
+                        <th class="px-4 py-2 text-left">Heure de connexion</th>
+                        <th class="px-4 py-2 text-left">Heure de déconnexion</th>
+                        <th class="px-4 py-2 text-left">Adresse IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in activities %}
+                    <tr class="border-t border-gray-600 hover:bg-gray-600 transition">
+                        <td class="px-4 py-2">
+                            {% if activity.logout_time %}
+                                Déconnexion
+                            {% else %}
+                                Connexion
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2 text-gray-300">{{ activity.login_time }}</td>
+                        <td class="px-4 py-2 text-gray-300">{{ activity.logout_time|default:"-" }}</td>
+                        <td class="px-4 py-2 text-gray-300">{{ activity.ip_address }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+
+        <!-- Message si aucune activité n'est trouvée -->
+        {% if date_filter and activities|length == 0 %}
+        <div class="mb-4 text-center text-red-400 text-sm">
+            L'utilisateur n'était pas connecté à la date sélectionnée.
+        </div>
+        {% endif %}
+
+        <!-- Bouton de retour -->
+        <div class="mt-4 flex justify-center">
+            <a href="{% url 'user_list' %}" class="bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition shadow-sm">⬅ Retour à la liste des utilisateurs</a>
+        </div>
+    </div>
+</body>
+</html>

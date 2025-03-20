@@ -1,0 +1,24 @@
+
+{% block content %}
+<h1>Historique des Maintenances pour {{ equipment.name }}</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Effectuée par</th>
+            <th>Coût</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in maintenance_logs %}
+        <tr>
+            <td>{{ log.maintenance_date }}</td>
+            <td>{{ log.description }}</td>
+            <td>{{ log.performed_by.username if log.performed_by else "N/A" }}</td>
+            <td>{{ log.cost if log.cost else "N/A" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

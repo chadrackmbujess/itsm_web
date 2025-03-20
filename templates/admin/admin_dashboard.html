@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-blue-600 p-4 text-white text-center text-lg font-bold">
+        Tableau de Bord Administrateur
+    </nav>
+
+    <div class="container mx-auto mt-6">
+        <div class="grid grid-cols-2 gap-4">
+
+            <!-- Liste des Utilisateurs -->
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-semibold mb-4">Utilisateurs</h2>
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="border p-2">Nom</th>
+                            <th class="border p-2">Email</th>
+                            <th class="border p-2">Rôle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr class="border">
+                            <td class="p-2">{{ user.username }}</td>
+                            <td class="p-2">{{ user.email }}</td>
+                            <td class="p-2">
+                                {% if user.is_admin %}Admin{% elif user.is_technician %}Technicien{% else %}Utilisateur{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Liste des Équipements -->
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-semibold mb-4">Équipements</h2>
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="border p-2">Nom</th>
+                            <th class="border p-2">Numéro de Série</th>
+                            <th class="border p-2">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for equipment in equipments %}
+                        <tr class="border">
+                            <td class="p-2">{{ equipment.name }}</td>
+                            <td class="p-2">{{ equipment.serial_number }}</td>
+                            <td class="p-2">{{ equipment.get_status_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

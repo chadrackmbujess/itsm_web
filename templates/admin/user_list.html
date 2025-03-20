@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Liste des utilisateurs</title>
+</head>
+<body class="bg-gray-900 text-white p-4 flex justify-center items-center min-h-screen">
+    <div class="max-w-6xl w-full bg-gray-800 shadow-2xl rounded-lg p-6 border border-gray-700">
+        <h1 class="text-3xl font-bold mb-4 text-center text-blue-400">📋 Liste des utilisateurs</h1>
+
+        <div class="mb-4 flex justify-center">
+            <input type="text" id="search" placeholder="Rechercher un utilisateur..." class="border rounded-md p-2 bg-gray-700 text-white text-sm w-1/2 focus:ring-2 focus:ring-blue-500 shadow-sm text-center">
+        </div>
+
+        <div class="overflow-x-auto rounded-lg shadow-sm border border-gray-700">
+            <table class="min-w-full bg-gray-700 rounded-md text-sm" id="userTable">
+                <thead>
+                    <tr class="bg-blue-600 text-white text-sm">
+                        <th class="px-4 py-2 text-left">Nom</th>
+                        <th class="px-4 py-2 text-left">Connexion</th>
+                        <th class="px-4 py-2 text-left">Fin d'Activité</th>
+                        <th class="px-4 py-2 text-left">Statut</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    {% for user in users %}
+                    <tr class="border-t border-gray-600 hover:bg-gray-600 transition duration-200" data-user-id="{{ user.id }}">
+                        <td class="px-4 py-2 username">{{ user.username }}</td>
+                        <td class="px-4 py-2 text-gray-300">{{ user.last_login }}</td>
+                        <td class="px-4 py-2 text-gray-300 last-activity">
+                            {% if user.is_online %}
+                                -
+                            {% else %}
+                                {{ user.last_activity }}
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2 status">
+                            {% if user.is_online %}
+                                <span class="text-green-400 font-bold">🟢 En ligne</span>
+                            {% else %}
+                                <span class="text-red-400 font-bold">🔴 Hors ligne</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2 flex items-center gap-2">
+                            <button onclick="window.location.href='{% url 'user_activity_history' user.id %}'" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition shadow-sm">📜</button>
+                            <button onclick="pingUser('{{ user.last_ip }}')" class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition shadow-sm">📡</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p id="noResultsMessage" class="text-center text-red-400 font-bold hidden p-4">Aucun utilisateur ne correspond à cette recherche.</p>
+        </div>
+    </div>
+
+    <script>
+
+        function pingUser(ip) {
+            fetch(`/ping/?ip=${ip}`)
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success ? `Ping réussi : ${ip} est en ligne.` : `Ping échoué : ${ip} est hors ligne.`);
+                })
+                .catch(error => console.error("Erreur lors du ping :", error));
+        }
+
+        function updateUserStatus() {
+            fetch('/api/auth/user_status/')
+                .then(response => response.json())
+                .then(data => {
+                    data.users.forEach(user => {
+                        const row = document.querySelector(`tr[data-user-id="${user.id}"]`);
+                        if (row) {
+                            const statusCell = row.querySelector('.status');
+                            const lastActivityCell = row.querySelector('.last-activity');
+
+                            // Mettre à jour le statut
+                            if (statusCell) {
+                                let statusHTML = user.is_online
+                                    ? '<span class="text-green-400 font-bold">🟢 En ligne</span>'
+                                    : '<span class="text-red-400 font-bold">🔴 Hors ligne</span>';
+                                statusCell.innerHTML = statusHTML;
+                            }
+
+                            // Mettre à jour la date de déconnexion uniquement pour l'utilisateur en ligne
+                            if (lastActivityCell) {
+                                if (user.is_online) {
+                                    lastActivityCell.textContent = '-';
+                                } else {
+                                    // Ne pas modifier la date de déconnexion pour les utilisateurs hors ligne
+                                    lastActivityCell.textContent = user.last_activity;
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error("Erreur lors de la mise à jour du statut :", error));
+        }
+
+        // Mettre à jour le statut toutes les 10 secondes
+        setInterval(updateUserStatus, 10000);
+        document.addEventListener('DOMContentLoaded', updateUserStatus);
+
+        // Gestion de la recherche
+        document.getElementById("search").addEventListener("keyup", function() {
+            let searchValue = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#userTableBody tr");
+            let hasResults = false;
+
+            rows.forEach(row => {
+                let username = row.querySelector(".username").textContent.toLowerCase();
+                let isVisible = username.includes(searchValue);
+                row.style.display = isVisible ? "table-row" : "none";
+                if (isVisible) hasResults = true;
+            });
+
+            document.getElementById("noResultsMessage").classList.toggle("hidden", hasResults);
+        });
+
+
+    </script>
+</body>
+</html>
