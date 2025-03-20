@@ -40,6 +40,7 @@ urlpatterns = [
     path('tickets/', TicketListCreateView.as_view(), name='ticket-list'),
     path('tickets/<int:pk>/', TicketDetailView.as_view(), name='ticket-detail'),
     path('tickets/<int:ticket_id>/commentaires/', CommentaireListCreateView.as_view(), name='commentaire-list-create'),
+    path('api/commentaires/', CommentaireListCreateView.as_view(), name='commentaire-list-create'),
     #path('tickets/<int:pk>/commentaires/', CommentaireListCreateView.as_view(), name='commentaire-list'),
     path('tickets/<int:pk>/pieces-jointes/', PieceJointeListCreateView.as_view(), name='piece-jointe-list'),
     #path('register-machine/', RegisterMachineView.as_view(), name="register-machine"),

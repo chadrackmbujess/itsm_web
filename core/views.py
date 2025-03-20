@@ -466,10 +466,8 @@ class CommentaireListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Récupérer l'ID du ticket depuis les paramètres de l'URL
-        ticket_id = self.kwargs['ticket_id']
-        # Filtrer les commentaires par ticket
-        return Commentaire.objects.filter(ticket_id=ticket_id)
+        # Filtrer les commentaires par l'utilisateur connecté
+        return Commentaire.objects.filter(auteur=self.request.user)
 
     def perform_create(self, serializer):
         # Associer l'utilisateur connecté au commentaire lors de la création
