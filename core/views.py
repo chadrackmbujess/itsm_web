@@ -1,6 +1,7 @@
 from sys import platform
 
 from django.core.mail import send_mail
+from django.dispatch import receiver
 from django.shortcuts import render
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
@@ -484,3 +485,50 @@ class PieceJointeListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # Associer l'utilisateur connecté à la pièce jointe lors de la création
         serializer.save(auteur=self.request.user)
+
+#vue templates
+
+def home(request):
+    return render(request, 'admin/home.html')
+
+def equipment_list(request):
+    equipments = Equipment.objects.all()  # Récupère tous les équipements
+    return render(request, 'admin/equipment_list.html', {'equipments': equipments})
+
+def ticket_liste(request):
+    tickets = Ticket.objects.all()  # Récupère tous les tickets
+    return render(request, 'admin/ticket_list.html', {'tickets': tickets})
+
+def ticket_detail(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)  # Récupère le ticket ou renvoie une 404
+    return render(request, 'admin/ticket_detail.html', {'ticket': ticket})
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.utils.timezone import now
+from .models import CustomUser, Equipment, Ticket
+
+
+@api_view(['GET'])
+def dashboard_stats(request):
+    users_online = CustomUser.objects.filter(is_online=True).count()
+    total_users = CustomUser.objects.count()
+
+    total_equipments = Equipment.objects.count()
+    equipment_statuses = Equipment.objects.values('status').distinct()
+
+    total_tickets = Ticket.objects.count()
+    tickets_by_status = Ticket.objects.values('statut').distinct()
+
+    return Response({
+        "users_online": users_online,
+        "total_users": total_users,
+        "total_equipments": total_equipments,
+        "equipment_statuses": {e['status']: Equipment.objects.filter(status=e['status']).count() for e in
+                               equipment_statuses},
+        "total_tickets": total_tickets,
+        "tickets_by_status": {t['statut']: Ticket.objects.filter(statut=t['statut']).count() for t in
+                              tickets_by_status},
+        "last_update": now(),
+    })

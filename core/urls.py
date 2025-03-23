@@ -4,6 +4,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import UserViewSet,TicketListCreateView
+from django_plotly_dash.views import DashApp
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename="users")
@@ -18,7 +19,7 @@ urlpatterns = [
     #path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('', include(router.urls)),
+    #path('', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("login/", LoginView.as_view(), name="login"),
@@ -45,4 +46,16 @@ urlpatterns = [
     path('tickets/<int:pk>/pieces-jointes/', PieceJointeListCreateView.as_view(), name='piece-jointe-list'),
     #path('register-machine/', RegisterMachineView.as_view(), name="register-machine"),
     #path('installed-apps/', InstalledAppsView.as_view(), name='installed-apps'),
-]
+
+    # urls templates
+
+    path('', views.home, name='home'),
+#    path('usersss/', views.user_liste, name='user_list'),
+    path('equipments/', views.equipment_list, name='equipment_list'),
+    path('ticket/', views.ticket_liste, name='ticket_liste'),
+    path('ticket/<int:ticket_id>/', views.ticket_detail, name='ticket_detail'),
+
+    #admin
+    path('dashboard/', dashboard_stats, name='dashboard-stats'),
+
+    ]
