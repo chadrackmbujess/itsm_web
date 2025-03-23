@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "admin/base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-xl font-bold mb-4">Bienvenue sur Mon Projet</h2>
+    <p class="text-gray-700">Gérez vos utilisateurs, équipements et tickets efficacement.</p>
+    <div class="mt-4">
+        <a href="{% url 'user_list' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Voir les utilisateurs</a>
+        <a href="{% url 'equipment_list' %}" class="bg-green-500 text-white px-4 py-2 rounded-lg ml-2">Voir les équipements</a>
+        <a href="{% url 'ticket_liste' %}" class="bg-purple-500 text-white px-4 py-2 rounded-lg ml-2">Voir les tickets</a>
+    </div>
+</div>
+{% endblock %}

@@ -5,9 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b25af8b-fff9-45b6-98a6-ffd2475c3ca9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/dashboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/admin/equipment_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/admin/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/admin/ticket_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/admin/ticket_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/admin/user_liste.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/signals.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/signals.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/itsm_backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/itsm_backend/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/admin_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/admin_dashboard.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +30,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -41,6 +54,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
     &quot;Python.models.executor&quot;: &quot;Run&quot;,
     &quot;Python.settings.executor&quot;: &quot;Run&quot;,
     &quot;Python.views.executor&quot;: &quot;Run&quot;,
@@ -51,6 +65,46 @@
     &quot;last_opened_file_path&quot;: &quot;D:/Mon TFE ITSM_GLPI/itsm_projet&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Mon TFE ITSM_GLPI\itsm_projet\templates\admin" />
+      <recent name="D:\Mon TFE ITSM_GLPI\itsm_projet\core" />
+      <recent name="D:\Mon TFE ITSM_GLPI\itsm_projet\dashboard" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Mon TFE ITSM_GLPI\itsm_projet\dashboard\templates" />
+      <recent name="D:\Mon TFE ITSM_GLPI\itsm_projet\templates" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dashboard" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="itsm_projet" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/core" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/core/dashboard.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.dashboard" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

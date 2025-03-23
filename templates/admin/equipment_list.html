@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "admin/base.html" %}
+
+{% block title %}Équipements{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-xl font-bold mb-4">Liste des équipements</h2>
+    <table class="min-w-full bg-white">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Nom</th>
+                <th class="py-2 px-4 border-b">Numéro de série</th>
+                <th class="py-2 px-4 border-b">Statut</th>
+                <th class="py-2 px-4 border-b">Assigné à</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for equipment in equipments %}
+            <tr>
+                <td class="py-2 px-4 border-b">{{ equipment.name }}</td>
+                <td class="py-2 px-4 border-b">{{ equipment.serial_number }}</td>
+                <td class="py-2 px-4 border-b">{{ equipment.get_status_display }}</td>
+                <td class="py-2 px-4 border-b">
+                    {% if equipment.assigned_to %}
+                        {{ equipment.assigned_to.username }}
+                    {% else %}
+                        Non assigné
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

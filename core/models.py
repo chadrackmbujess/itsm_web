@@ -24,7 +24,7 @@ class CustomUser(AbstractUser):
     ram_info = models.FloatField(null=True, blank=True)  # RAM en Go
     wifi_cards = models.IntegerField(default=0)  # Nombre de cartes Wi-Fi
     network_cards = models.IntegerField(default=0)  # Nombre de cartes réseau
-    is_online = models.BooleanField(default=False)  # ✅ Indique si l'utilisateur est en ligne
+    #is_online = models.BooleanField(default=False)  # ✅ Indique si l'utilisateur est en ligne
 
     # 📌 Applications installées (stockées sous forme de JSON)
 
@@ -74,10 +74,10 @@ class Equipment(models.Model):
     status = models.CharField(
         max_length=50,
         choices=[
-            ('new', 'Nouveau'),
-            ('in_use', 'En utilisation'),
-            ('under_maintenance', 'En maintenance'),
-            ('retired', 'Retiré'),
+            ('Nouveau', 'Nouveau'),
+            ('En_utilisation', 'En utilisation'),
+            ('En_maintenance', 'En maintenance'),
+            ('Retiré', 'Retiré'),
         ],
         default='new',
         verbose_name="Statut"

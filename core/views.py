@@ -1,6 +1,7 @@
 from sys import platform
 
 from django.core.mail import send_mail
+from django.dispatch import receiver
 from django.shortcuts import render
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
@@ -484,3 +485,60 @@ class PieceJointeListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # Associer l'utilisateur connecté à la pièce jointe lors de la création
         serializer.save(auteur=self.request.user)
+
+#vue templates
+
+def home(request):
+    return render(request, 'admin/home.html')
+
+def equipment_list(request):
+    equipments = Equipment.objects.all()  # Récupère tous les équipements
+    return render(request, 'admin/equipment_list.html', {'equipments': equipments})
+
+def ticket_liste(request):
+    tickets = Ticket.objects.all()  # Récupère tous les tickets
+    return render(request, 'admin/ticket_list.html', {'tickets': tickets})
+
+def ticket_detail(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)  # Récupère le ticket ou renvoie une 404
+    return render(request, 'admin/ticket_detail.html', {'ticket': ticket})
+
+
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from .models import LoginHistory, Ticket, Equipment
+
+User = get_user_model()
+
+def dashboard_stats(request):
+    # Nombre d'utilisateurs en ligne
+    online_users = LoginHistory.objects.filter(is_online=True).values('user').distinct().count()
+
+    # Nombre total d'utilisateurs
+    total_users = User.objects.count()
+
+    # Nombre total de tickets
+    total_tickets = Ticket.objects.count()
+
+    # Répartition des équipements par statut
+    equipment_statuses = Equipment.objects.values_list('status', flat=True)
+    equipment_status_counts = {status: equipment_statuses.filter(status=status).count() for status in set(equipment_statuses)}
+
+    # Répartition des tickets par statut
+    tickets_by_status = Ticket.objects.values_list('statut', flat=True)
+    tickets_by_status_counts = {status: tickets_by_status.filter(statut=status).count() for status in set(tickets_by_status)}
+
+    # Répartition des tickets par priorité
+    tickets_by_priority = Ticket.objects.values_list('priorite', flat=True)
+    tickets_by_priority_counts = {priority: tickets_by_priority.filter(priorite=priority).count() for priority in set(tickets_by_priority)}
+
+    # Retourner les données au format JSON
+    data = {
+        "users_online": online_users,
+        "total_users": total_users,
+        "total_tickets": total_tickets,
+        "equipment_statuses": equipment_status_counts,
+        "tickets_by_status": tickets_by_status_counts,
+        "tickets_by_priority": tickets_by_priority_counts,  # Ajout des priorités
+    }
+    return JsonResponse(data)

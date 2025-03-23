@@ -6,18 +6,14 @@ from django.utils import timezone
 
 User = get_user_model()
 
-@receiver(pre_delete, sender=User)
-def log_user_logout(sender, instance, **kwargs):
-    # Enregistrer la déconnexion
-    session_log = LoginHistory.objects.filter(user=instance, logout_time__isnull=True).last()
-    if session_log:
-        session_log.logout_time = timezone.now()
-        session_log.save()
-
-from django.contrib.auth.signals import user_logged_in, user_logged_out
-from django.utils.timezone import now
+from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-from .models import CustomUser
+from django.contrib.auth import get_user_model
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.utils import timezone
+from .models import LoginHistory
+
+User = get_user_model()
 
 def get_client_ip(request):
     """ Récupère l'adresse IP de l'utilisateur """
@@ -29,18 +25,33 @@ def get_client_ip(request):
     return ip
 
 @receiver(user_logged_in)
-def set_user_online(sender, request, user, **kwargs):
-    """ Marquer l'utilisateur comme en ligne lors de la connexion """
-    user.is_online = True
-    user.last_login_time = now()
-    user.last_ip = get_client_ip(request)
-    user.save()
+def handle_user_login(sender, request, user, **kwargs):
+    """ Gère la connexion de l'utilisateur """
+    ip_address = get_client_ip(request)
+    LoginHistory.objects.create(
+        user=user,
+        login_time=timezone.now(),
+        ip_address=ip_address,
+        is_online=True
+    )
 
 @receiver(user_logged_out)
-def set_user_offline(sender, request, user, **kwargs):
-    """ Marquer l'utilisateur comme hors ligne à la déconnexion """
-    user.is_online = False
-    user.save()
+def handle_user_logout(sender, request, user, **kwargs):
+    """ Gère la déconnexion de l'utilisateur """
+    session_log = LoginHistory.objects.filter(user=user, logout_time__isnull=True).last()
+    if session_log:
+        session_log.logout_time = timezone.now()
+        session_log.is_online = False
+        session_log.save()
+
+@receiver(pre_delete, sender=User)
+def log_user_logout_on_delete(sender, instance, **kwargs):
+    """ Gère la déconnexion forcée lors de la suppression de l'utilisateur """
+    session_log = LoginHistory.objects.filter(user=instance, logout_time__isnull=True).last()
+    if session_log:
+        session_log.logout_time = timezone.now()
+        session_log.is_online = False
+        session_log.save()
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver

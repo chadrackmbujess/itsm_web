@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "admin/base.html" %}
+
+{% block title %}Tickets{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-xl font-bold mb-4">Liste des tickets</h2>
+    <table class="min-w-full bg-white">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Titre</th>
+                <th class="py-2 px-4 border-b">Catégorie</th>
+                <th class="py-2 px-4 border-b">Statut</th>
+                <th class="py-2 px-4 border-b">Priorité</th>
+                <th class="py-2 px-4 border-b">Propriétaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td class="py-2 px-4 border-b">
+                    <a href="{% url 'ticket_detail' ticket.id %}" class="text-blue-500 hover:underline">
+                        {{ ticket.title }}
+                    </a>
+                </td>
+                <td class="py-2 px-4 border-b">{{ ticket.get_categorie_display }}</td>
+                <td class="py-2 px-4 border-b">{{ ticket.get_statut_display }}</td>
+                <td class="py-2 px-4 border-b">{{ ticket.get_priorite_display }}</td>
+                <td class="py-2 px-4 border-b">{{ ticket.owner.username }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
