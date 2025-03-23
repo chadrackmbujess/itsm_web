@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 from dash import Dash, dcc, html
+=======
+import dash
+from dash import dcc, html
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.express as px
@@ -6,7 +11,12 @@ import requests
 import pandas as pd
 
 # Initialiser l'application Dash
+<<<<<<< HEAD
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+=======
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
 
 # Fonction pour récupérer les données de Django
 def fetch_data():
@@ -15,9 +25,16 @@ def fetch_data():
         return response.json()
     return {}
 
+<<<<<<< HEAD
 # Layout du tableau de bord
 app.layout = dbc.Container([
     html.H1("Tableau de Bord ITSM", className="text-center mt-4"),
+=======
+
+# Layout du tableau de bord
+app.layout = dbc.Container([
+    html.H1("Tableau de Bord IT", className="text-center mt-4"),
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
     dbc.Row([
         dbc.Col(dbc.Card([
             dbc.CardHeader("Utilisateurs en ligne"),
@@ -40,6 +57,7 @@ app.layout = dbc.Container([
         dbc.Col(dcc.Graph(id="ticket-chart"), width=6),
     ]),
 
+<<<<<<< HEAD
     dbc.Row([
         dbc.Col(dcc.Graph(id="priority-chart"), width=12),  # Nouveau graphique pour les priorités
     ]),
@@ -47,14 +65,24 @@ app.layout = dbc.Container([
     dcc.Interval(id="interval-update", interval=5000, n_intervals=0)
 ])
 
+=======
+    dcc.Interval(id="interval-update", interval=5000, n_intervals=0)
+])
+
+
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
 # Callback pour mettre à jour les données
 @app.callback(
     [Output("users-online", "children"),
      Output("total-users", "children"),
      Output("total-tickets", "children"),
      Output("equipment-chart", "figure"),
+<<<<<<< HEAD
      Output("ticket-chart", "figure"),
      Output("priority-chart", "figure")],  # Ajout du nouvel output
+=======
+     Output("ticket-chart", "figure")],
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
     Input("interval-update", "n_intervals")
 )
 def update_dashboard(n):
@@ -70,11 +98,16 @@ def update_dashboard(n):
     df_equipments = pd.DataFrame(list(equipment_statuses.items()), columns=["Statut", "Nombre"])
     fig_equipments = px.pie(df_equipments, names="Statut", values="Nombre", title="Répartition des Équipements")
 
+<<<<<<< HEAD
     # Graphique des tickets par statut
+=======
+    # Graphique des tickets
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
     tickets_by_status = data.get("tickets_by_status", {})
     df_tickets = pd.DataFrame(list(tickets_by_status.items()), columns=["Statut", "Nombre"])
     fig_tickets = px.bar(df_tickets, x="Statut", y="Nombre", title="Statut des Tickets", color="Statut")
 
+<<<<<<< HEAD
     # Graphique des tickets par priorité
     tickets_by_priority = data.get("tickets_by_priority", {})
     df_priority = pd.DataFrame(list(tickets_by_priority.items()), columns=["Priorité", "Nombre"])
@@ -85,3 +118,11 @@ def update_dashboard(n):
 # Exécuter l'application Dash
 if __name__ == "__main__":
     app.run_server(debug=True)
+=======
+    return users_online, total_users, total_tickets, fig_equipments, fig_tickets
+
+
+# Exécuter l'application Dash
+if __name__ == "__main__":
+    app.run_server(debug=True)
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a

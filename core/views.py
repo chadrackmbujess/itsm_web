@@ -504,6 +504,7 @@ def ticket_detail(request, ticket_id):
     return render(request, 'admin/ticket_detail.html', {'ticket': ticket})
 
 
+<<<<<<< HEAD
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from .models import LoginHistory, Ticket, Equipment
@@ -542,3 +543,33 @@ def dashboard_stats(request):
         "tickets_by_priority": tickets_by_priority_counts,  # Ajout des priorités
     }
     return JsonResponse(data)
+=======
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.utils.timezone import now
+from .models import CustomUser, Equipment, Ticket
+
+
+@api_view(['GET'])
+def dashboard_stats(request):
+    users_online = CustomUser.objects.filter(is_online=True).count()
+    total_users = CustomUser.objects.count()
+
+    total_equipments = Equipment.objects.count()
+    equipment_statuses = Equipment.objects.values('status').distinct()
+
+    total_tickets = Ticket.objects.count()
+    tickets_by_status = Ticket.objects.values('statut').distinct()
+
+    return Response({
+        "users_online": users_online,
+        "total_users": total_users,
+        "total_equipments": total_equipments,
+        "equipment_statuses": {e['status']: Equipment.objects.filter(status=e['status']).count() for e in
+                               equipment_statuses},
+        "total_tickets": total_tickets,
+        "tickets_by_status": {t['statut']: Ticket.objects.filter(statut=t['statut']).count() for t in
+                              tickets_by_status},
+        "last_update": now(),
+    })
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a

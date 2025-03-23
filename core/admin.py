@@ -4,6 +4,10 @@ from .models import (
     EquipmentHistory, UserActivity, Ticket, Commentaire, PieceJointe, LoginHistory
 )
 
+<<<<<<< HEAD
+=======
+# Filtre personnalisé pour is_online
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
 class IsOnlineFilter(admin.SimpleListFilter):
     title = 'En ligne'  # Titre du filtre
     parameter_name = 'is_online'  # Nom du paramètre dans l'URL
@@ -18,6 +22,7 @@ class IsOnlineFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         # Appliquer le filtre
         if self.value() == 'true':
+<<<<<<< HEAD
             # Utilisateurs avec une entrée LoginHistory is_online=True
             online_users = LoginHistory.objects.filter(is_online=True).values_list('user_id', flat=True)
             return queryset.filter(id__in=online_users)
@@ -40,6 +45,19 @@ class CustomUserAdmin(admin.ModelAdmin):
     get_is_online.short_description = 'En ligne'
     get_is_online.boolean = True  # Affiche une icône vrai/faux dans l'admin
 
+=======
+            return queryset.filter(is_online=True)
+        if self.value() == 'false':
+            return queryset.filter(is_online=False)
+
+# Configuration personnalisée pour CustomUser
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'is_technician', 'is_admin', 'is_online')
+    search_fields = ('username', 'email')
+    list_filter = (IsOnlineFilter, 'is_technician', 'is_admin')  # Utilisez le filtre personnalisé
+    readonly_fields = ('last_ip', 'last_login_time')  # Empêcher la modification manuelle
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
 
 # Configuration personnalisée pour Equipment
 class EquipmentStatusFilter(admin.SimpleListFilter):
@@ -64,6 +82,10 @@ class EquipmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'serial_number', 'status', 'assigned_to', 'location')
     search_fields = ('name', 'serial_number', 'assigned_to__username')
     list_filter = (EquipmentStatusFilter, 'location')
+<<<<<<< HEAD
+=======
+
+>>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
 # Configuration personnalisée pour MaintenanceLog
 @admin.register(MaintenanceLog)
 class MaintenanceLogAdmin(admin.ModelAdmin):
