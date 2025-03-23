@@ -504,7 +504,6 @@ def ticket_detail(request, ticket_id):
     return render(request, 'admin/ticket_detail.html', {'ticket': ticket})
 
 
-<<<<<<< HEAD
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from .models import LoginHistory, Ticket, Equipment
@@ -543,7 +542,7 @@ def dashboard_stats(request):
         "tickets_by_priority": tickets_by_priority_counts,  # Ajout des priorités
     }
     return JsonResponse(data)
-=======
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.utils.timezone import now
@@ -572,4 +571,3 @@ def dashboard_stats(request):
                               tickets_by_status},
         "last_update": now(),
     })
->>>>>>> f1801716dfccfbab4437af9b6d089e6207084b3a
